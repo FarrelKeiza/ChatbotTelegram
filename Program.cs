@@ -20,6 +20,9 @@ var botToken = Environment.GetEnvironmentVariable("BOT_TOKEN")
 var catFactsApiUrl = Environment.GetEnvironmentVariable("CAT_FACTS_API_URL")
                       ?? throw new Exception("CAT_FACTS_API_URL tidak ditemukan di .env");
 
+var jokeApiUrl = Environment.GetEnvironmentVariable("JOKE_API_URL")
+                 ?? throw new Exception("JOKE_API_URL tidak ditemukan di .env");
+
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
@@ -49,6 +52,13 @@ var host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
             var catFactsApiUrl = Environment.GetEnvironmentVariable("CAT_FACTS_API_URL")
                                  ?? throw new Exception("CAT_FACTS_API_URL tidak ditemukan di .env");
             return new CatFactService(httpClient, catFactsApiUrl);
+        });
+
+        services.AddScoped<JokeService>(provider =>
+        {
+            var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+            var httpClient = httpClientFactory.CreateClient();
+            return new JokeService(httpClient, jokeApiUrl);
         });
 
         // Bot client

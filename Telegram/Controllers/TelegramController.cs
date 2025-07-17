@@ -12,14 +12,16 @@ namespace Telegram.Controllers
         private readonly TelegramBotClient _botClient;
         private readonly UserService _userService;
         private readonly CatFactService _catFactService; // Ini deklarasi field
+        private readonly JokeService _jokeService; 
         private static readonly Dictionary<long, UserCreationSession> UserSessions = new();
 
         // Perbaiki konstruktor di sini: tambahkan CatFactService sebagai parameter
-        public TelegramController(TelegramBotClient botClient, UserService userService, CatFactService catFactService)
+        public TelegramController(TelegramBotClient botClient, UserService userService, CatFactService catFactService, JokeService jokeService)
         {
             _botClient = botClient;
             _userService = userService;
             _catFactService = catFactService; // Sekarang 'catFactService' berasal dari parameter konstruktor
+            _jokeService = jokeService; // Inisialisasi JokeService
         }
 
         public async Task HandleUpdateAsync(Update update)
@@ -137,16 +139,33 @@ namespace Telegram.Controllers
                 }
                 return;
             }
+            
+            if (messageText.StartsWith("/joke"))
+            {
+                await _botClient.SendChatAction(chatId, ChatAction.Typing); // Menggunakan SendChatAction (tanpa Async)
+                var joke = await _jokeService.GetRandomJokeAsync();
+
+                if (!string.IsNullOrEmpty(joke))
+                {
+                    await _botClient.SendMessage(chatId, $"😂 Joke untukmu:\n\n{joke}"); // Menggunakan SendMessage (tanpa Async)
+                }
+                else
+                {
+                    await _botClient.SendMessage(chatId, "❌ Maaf, tidak dapat mengambil joke saat ini. Coba lagi nanti!"); // Menggunakan SendMessage (tanpa Async)
+                }
+                return;
+            }
 
             // 🚀 Perintah /start
             if (messageText.StartsWith("/start"))
             {
-                await _botClient.SendMessage(chatId,
-                    "👋 Selamat datang!\n\nPerintah:\n" +
-                    "`/info user <username>` → Lihat info user\n" +
-                    "`/add user` → Tambah user baru\n" +
-                    "`/catfact` → Dapatkan fakta kucing acak", // Baris ini sudah benar ditambahkan
-                    parseMode: ParseMode.Markdown);
+                string welcomeMessage = "👋 Selamat datang!\n\nPerintah:\n" +
+                                        "`/info user <username>` → Lihat info user\n" +
+                                        "`/add user` → Tambah user baru\n" +
+                                        "`/catfact` → Dapatkan fakta kucing acak\n" +
+                                        "`/joke` → Dapatkan joke acak"; // <-- Tambahkan baris ini
+
+                await _botClient.SendMessage(chatId, welcomeMessage, parseMode: ParseMode.Markdown); // Menggunakan SendMessage (tanpa Async)
                 return;
             }
         }
