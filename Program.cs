@@ -61,6 +61,8 @@ var host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
             return new JokeService(httpClient, jokeApiUrl);
         });
 
+        services.AddScoped<ReportService>();
+
         // Bot client
         services.AddSingleton<TelegramBotClient>(_ => new TelegramBotClient(botToken));
     })

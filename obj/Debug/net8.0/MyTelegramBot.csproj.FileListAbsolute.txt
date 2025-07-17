@@ -146,3 +146,11 @@ D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\refint\MyTeleg
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.pdb
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.genruntimeconfig.cache
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\ref\MyTelegramBot.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\ClosedXML.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\ClosedXML.Parser.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\ExcelNumberFormat.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\RBush.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\SixLabors.Fonts.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.IO.Packaging.dll

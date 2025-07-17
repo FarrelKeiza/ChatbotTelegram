@@ -13,15 +13,17 @@ namespace Telegram.Controllers
         private readonly UserService _userService;
         private readonly CatFactService _catFactService; // Ini deklarasi field
         private readonly JokeService _jokeService; 
+        private readonly ReportService _reportService;
         private static readonly Dictionary<long, UserCreationSession> UserSessions = new();
 
         // Perbaiki konstruktor di sini: tambahkan CatFactService sebagai parameter
-        public TelegramController(TelegramBotClient botClient, UserService userService, CatFactService catFactService, JokeService jokeService)
+        public TelegramController(TelegramBotClient botClient, UserService userService, CatFactService catFactService, JokeService jokeService, ReportService reportService)
         {
             _botClient = botClient;
             _userService = userService;
             _catFactService = catFactService; // Sekarang 'catFactService' berasal dari parameter konstruktor
             _jokeService = jokeService; // Inisialisasi JokeService
+            _reportService = reportService;
         }
 
         public async Task HandleUpdateAsync(Update update)
@@ -156,6 +158,34 @@ namespace Telegram.Controllers
                 return;
             }
 
+             if (messageText.StartsWith("/report_file user"))
+            {
+                await _botClient.SendChatAction(chatId, ChatAction.UploadDocument); // Menunjukkan bot sedang mengunggah dokumen
+
+                try
+                {
+                    var (fileStream, fileName) = await _reportService.GenerateUserReportAsync();
+
+                    // Kirim file ke Telegram
+                    await _botClient.SendDocument(
+                        chatId: chatId,
+                        document: new InputFileStream(fileStream, fileName), // Gunakan InputFileStream
+                        caption: "📊 Berikut adalah laporan data user dalam format Excel."
+                    );
+
+                    // Penting: Pastikan stream ditutup setelah digunakan
+                    await fileStream.DisposeAsync();
+                    Console.WriteLine($"[LOG] Laporan '{fileName}' berhasil dikirim ke chat ID: {chatId}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[ERROR] Gagal membuat atau mengirim laporan: {ex.Message}");
+                    await _botClient.SendMessage(chatId, "❌ Maaf, gagal membuat atau mengirim laporan saat ini.");
+                }
+                return;
+            }
+
+
             // 🚀 Perintah /start
             if (messageText.StartsWith("/start"))
             {
@@ -163,8 +193,8 @@ namespace Telegram.Controllers
                                         "`/info user <username>` → Lihat info user\n" +
                                         "`/add user` → Tambah user baru\n" +
                                         "`/catfact` → Dapatkan fakta kucing acak\n" +
-                                        "`/joke` → Dapatkan joke acak"; // <-- Tambahkan baris ini
-
+                                        "`/joke` → Dapatkan joke acak\n" + // <-- Tambahkan baris ini
+                                        "`/report_file user` → Dapatkan laporan user dalam Excel";
                 await _botClient.SendMessage(chatId, welcomeMessage, parseMode: ParseMode.Markdown); // Menggunakan SendMessage (tanpa Async)
                 return;
             }

@@ -20,6 +20,12 @@ namespace Application.Services
             return user == null ? null : UserMapper.ToDto(user);
         }
 
+        public async Task<List<UserDto>> GetAllUsersAsync()
+        {
+            var users = await _repo.GetAllAsync(); // Kita akan menambahkan GetAllAsync di IUserRepository dan UserRepository
+            return users.Select(u => UserMapper.ToDto(u)).ToList();
+        }
+
         public async Task CreateUserAsync(UserDto userDto)
         {
             try
