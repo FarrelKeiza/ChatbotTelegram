@@ -10,12 +10,15 @@ using Infrastructure.Repositories;
 using Domain.Interfaces;
 using Infrastructure;
 using Telegram.Controllers;
-
+using System.Net.Http;
 
 Env.Load();
 
 var botToken = Environment.GetEnvironmentVariable("BOT_TOKEN")
                ?? throw new Exception("BOT_TOKEN tidak ditemukan di .env");
+
+var catFactsApiUrl = Environment.GetEnvironmentVariable("CAT_FACTS_API_URL")
+                      ?? throw new Exception("CAT_FACTS_API_URL tidak ditemukan di .env");
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
@@ -36,6 +39,17 @@ var host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<UserService>();
         services.AddScoped<TelegramController>();
+
+        services.AddHttpClient();
+
+        services.AddScoped<CatFactService>(provider =>
+        {
+            var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+            var httpClient = httpClientFactory.CreateClient(); // Ambil HttpClient dari factory
+            var catFactsApiUrl = Environment.GetEnvironmentVariable("CAT_FACTS_API_URL")
+                                 ?? throw new Exception("CAT_FACTS_API_URL tidak ditemukan di .env");
+            return new CatFactService(httpClient, catFactsApiUrl);
+        });
 
         // Bot client
         services.AddSingleton<TelegramBotClient>(_ => new TelegramBotClient(botToken));

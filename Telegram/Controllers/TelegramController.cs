@@ -11,12 +11,15 @@ namespace Telegram.Controllers
     {
         private readonly TelegramBotClient _botClient;
         private readonly UserService _userService;
+        private readonly CatFactService _catFactService; // Ini deklarasi field
         private static readonly Dictionary<long, UserCreationSession> UserSessions = new();
 
-        public TelegramController(TelegramBotClient botClient, UserService userService)
+        // Perbaiki konstruktor di sini: tambahkan CatFactService sebagai parameter
+        public TelegramController(TelegramBotClient botClient, UserService userService, CatFactService catFactService)
         {
             _botClient = botClient;
             _userService = userService;
+            _catFactService = catFactService; // Sekarang 'catFactService' berasal dari parameter konstruktor
         }
 
         public async Task HandleUpdateAsync(Update update)
@@ -82,6 +85,7 @@ namespace Telegram.Controllers
                 }
             }
 
+
             // 🔘 Command untuk memulai tambah user
             if (messageText.StartsWith("/add user"))
             {
@@ -117,13 +121,31 @@ namespace Telegram.Controllers
                 return;
             }
 
+            if (messageText.StartsWith("/catfact"))
+            {
+                await _botClient.SendChatAction(chatId, ChatAction.Typing); // Menunjukkan bot sedang mengetik
+
+                var fact = await _catFactService.GetRandomCatFactAsync();
+
+                if (!string.IsNullOrEmpty(fact))
+                {
+                    await _botClient.SendMessage(chatId, $"🐱 Fakta Kucing: {fact}");
+                }
+                else
+                {
+                    await _botClient.SendMessage(chatId, "❌ Maaf, tidak dapat mengambil fakta kucing saat ini. Coba lagi nanti!");
+                }
+                return;
+            }
+
             // 🚀 Perintah /start
             if (messageText.StartsWith("/start"))
             {
                 await _botClient.SendMessage(chatId,
                     "👋 Selamat datang!\n\nPerintah:\n" +
                     "`/info user <username>` → Lihat info user\n" +
-                    "`/add user` → Tambah user baru",
+                    "`/add user` → Tambah user baru\n" +
+                    "`/catfact` → Dapatkan fakta kucing acak", // Baris ini sudah benar ditambahkan
                     parseMode: ParseMode.Markdown);
                 return;
             }

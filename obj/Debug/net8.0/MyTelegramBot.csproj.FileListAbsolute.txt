@@ -38,6 +38,7 @@ D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Exte
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Extensions.FileSystemGlobbing.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Extensions.Hosting.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Extensions.Http.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Microsoft.Extensions.Logging.Configuration.dll
@@ -61,6 +62,7 @@ D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.Composi
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.Diagnostics.EventLog.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.IO.Pipelines.dll
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.Net.Http.Json.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.Text.Encodings.Web.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\System.Text.Json.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\bin\Debug\net8.0\Telegram.Bot.dll
@@ -137,6 +139,7 @@ D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.AssemblyInfoInputs.cache
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.AssemblyInfo.cs
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.csproj.CoreCompileInputs.cache
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.sourcelink.json
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegr.50D35A66.Up2Date
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\MyTelegramBot.dll
 D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net8.0\refint\MyTelegramBot.dll
