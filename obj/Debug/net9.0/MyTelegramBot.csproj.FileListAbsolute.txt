@@ -1,0 +1,5 @@
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net9.0\MyTelegramBot.csproj.AssemblyReference.cache
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net9.0\MyTelegramBot.GeneratedMSBuildEditorConfig.editorconfig
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net9.0\MyTelegramBot.AssemblyInfoInputs.cache
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net9.0\MyTelegramBot.AssemblyInfo.cs
+D:\Intern NTI\Periode 2\Hari ke-14\MyTelegramBot\obj\Debug\net9.0\MyTelegramBot.csproj.CoreCompileInputs.cache

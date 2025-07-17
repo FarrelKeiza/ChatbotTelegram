@@ -1,0 +1,132 @@
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using Application.Services;
+using Domain.Sessions;
+using Application.Dtos;
+
+namespace Telegram.Controllers
+{
+    public class TelegramController
+    {
+        private readonly TelegramBotClient _botClient;
+        private readonly UserService _userService;
+        private static readonly Dictionary<long, UserCreationSession> UserSessions = new();
+
+        public TelegramController(TelegramBotClient botClient, UserService userService)
+        {
+            _botClient = botClient;
+            _userService = userService;
+        }
+
+        public async Task HandleUpdateAsync(Update update)
+        {
+            if (update.Type != UpdateType.Message || update.Message?.Text is not { } messageText)
+                return;
+
+            var chatId = update.Message.Chat.Id;
+
+            // 🔄 Proses interaktif jika sedang input user
+            if (UserSessions.TryGetValue(chatId, out var session))
+            {
+                switch (session.Step)
+                {
+                    case 1:
+                        if (string.IsNullOrWhiteSpace(messageText))
+                        {
+                            await _botClient.SendMessage(chatId, "❌ Nama tidak boleh kosong. Masukkan nama:");
+                            return;
+                        }
+
+                        session.Name = messageText;
+                        session.Step = 2;
+                        await _botClient.SendMessage(chatId, "📆 Berapa umur user?");
+                        return;
+
+                    case 2:
+                        if (!int.TryParse(messageText, out var age))
+                        {
+                            await _botClient.SendMessage(chatId, "❌ Umur harus berupa angka. Coba lagi:");
+                            return;
+                        }
+
+                        session.Age = age;
+                        session.Step = 3;
+                        await _botClient.SendMessage(chatId, "🎯 Apa hobi user?");
+                        return;
+
+                    case 3:
+                        session.Hobby = messageText;
+
+                        var userDto = new UserDto
+                        {
+                            Name = session.Name!,
+                            Age = session.Age ?? 0,
+                            Hobby = session.Hobby!
+                        };
+
+                        try
+                        {
+                            await _userService.CreateUserAsync(userDto);
+                            await _botClient.SendMessage(chatId, $"✅ User *{userDto.Name}* berhasil ditambahkan ke database!", parseMode: ParseMode.Markdown);
+                            Console.WriteLine($"[LOG] User '{userDto.Name}' berhasil disimpan.");
+                        }
+                        catch (Exception ex)
+                        {
+                            await _botClient.SendMessage(chatId, $"❌ Gagal menyimpan user: {ex.Message}");
+                            Console.WriteLine($"[ERROR] Gagal menyimpan user: {ex.Message}");
+                        }
+
+                        UserSessions.Remove(chatId);
+                        return;
+                }
+            }
+
+            // 🔘 Command untuk memulai tambah user
+            if (messageText.StartsWith("/add user"))
+            {
+                UserSessions[chatId] = new UserCreationSession { Step = 1 };
+                await _botClient.SendMessage(chatId, "👤 Siapa nama user?");
+                return;
+            }
+
+            // 🔍 Info user
+            if (messageText.StartsWith("/info user"))
+            {
+                var parts = messageText.Split(' ');
+                if (parts.Length < 3)
+                {
+                    await _botClient.SendMessage(chatId, "❌ Format salah. Gunakan: /info user <username>");
+                    return;
+                }
+
+                var username = parts[2].ToLower();
+                var userDto = await _userService.GetUserInfoAsync(username);
+
+                if (userDto == null)
+                {
+                    await _botClient.SendMessage(chatId, $"❌ User \"{username}\" tidak ditemukan.");
+                }
+                else
+                {
+                    await _botClient.SendMessage(chatId,
+                        $"📄 *Informasi User*\n\n👤 Nama: {userDto.Name}\n🎂 Umur: {userDto.Age} Tahun\n🎯 Hobi: {userDto.Hobby}",
+                        parseMode: ParseMode.Markdown);
+                }
+
+                return;
+            }
+
+            // 🚀 Perintah /start
+            if (messageText.StartsWith("/start"))
+            {
+                await _botClient.SendMessage(chatId,
+                    "👋 Selamat datang!\n\nPerintah:\n" +
+                    "`/info user <username>` → Lihat info user\n" +
+                    "`/add user` → Tambah user baru",
+                    parseMode: ParseMode.Markdown);
+                return;
+            }
+        }
+    }
+}
